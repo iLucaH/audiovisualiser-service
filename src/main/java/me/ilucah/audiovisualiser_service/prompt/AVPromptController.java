@@ -50,7 +50,14 @@ public class AVPromptController {
                                 No explanations.
                                 No markdown.
                                 No extra text.
-                                You can use an int time uniform.
+                                The uniforms you have access to are:
+                                uniform int time;
+                                uniform float leftRMS;
+                                uniform float rightRMS;
+                                uniform float screenWidth;
+                                uniform float screenHeight;
+                                uniform float audioBufferTD[256];
+                                The uniform audioBufferTD is a buffer of data in the time domain.
                                 """)
                         .addUserMessage(prompt)
                         .build();
