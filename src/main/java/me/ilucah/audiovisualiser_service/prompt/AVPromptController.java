@@ -43,7 +43,7 @@ public class AVPromptController {
         }
 
         ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
-                        .model(ChatModel.GPT_5_MINI)
+                        .model(ChatModel.GPT_5_2)
                         .addSystemMessage("""
                                 You generate OpenGL GLSL 330 core shaders.
                                 Output ONLY the fragment shader code.
