@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: audiovisualiser-service
+
+openai:
+  base-url: https://api.openai.com/v1
+  api-key: ${OPENAI_AV_API_KEY:}
+  org-id: iLucaH
+  project-id: AudioVisualiser
