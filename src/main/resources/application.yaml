@@ -7,3 +7,7 @@ openai:
   api-key: ${OPENAI_AV_API_KEY:}
   org-id: iLucaH
   project-id: AudioVisualiser
+
+rsa:
+  private-key: classpath:certs/private.pem
+  public-key: classpath:certs/public.pem
