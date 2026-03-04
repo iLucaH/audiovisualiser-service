@@ -1,13 +1,14 @@
-package me.ilucah.audiovisualiser_service.prompt;
+package me.ilucah.audiovisualiser_service.controller;
 
 import com.openai.client.OpenAIClientAsync;
 import com.openai.client.okhttp.OpenAIOkHttpClientAsync;
 import com.openai.models.ChatModel;
 import com.openai.models.chat.completions.ChatCompletion;
 import com.openai.models.chat.completions.ChatCompletionCreateParams;
-import me.ilucah.audiovisualiser_service.token.TokenHandler;
+import me.ilucah.audiovisualiser_service.prompt.PromptResolve;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,7 +17,7 @@ import jakarta.annotation.PostConstruct;
 import java.util.concurrent.ExecutionException;
 
 @RestController
-public class AVPromptController {
+public class PromptController {
 
     @Value("${openai.api-key}")
     private String apiKey;
@@ -30,21 +31,11 @@ public class AVPromptController {
                 .build();
     }
 
-    @GetMapping("/prompt")
-    public String prompt(@RequestParam Long token,
-                         @RequestParam String prompt) {
-
-        if (!TokenHandler.isValidToken(token)) {
-            return PromptResolve.builder()
-                    .success(false)
-                    .prompt("Invalid token")
-                    .build()
-                    .toJson();
-        }
-
+    @PostMapping("/prompt")
+    public String prompt(@RequestBody String prompt) {
         ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
-                        .model(ChatModel.GPT_5_2)
-                        .addSystemMessage("""
+                .model(ChatModel.GPT_5_2)
+                .addSystemMessage("""
                                 You generate OpenGL GLSL 330 core shaders.
                                 Output ONLY the fragment shader code.
                                 No explanations.
@@ -59,19 +50,18 @@ public class AVPromptController {
                                 uniform float audioBufferTD[256];
                                 The uniform audioBufferTD is a buffer of data in the time domain.
                                 """)
-                        .addUserMessage(prompt)
-                        .build();
-
+                .addUserMessage(prompt)
+                .build();
         try {
             ChatCompletion completion = client.chat()
-                            .completions()
-                            .create(params)
-                            .get();
+                    .completions()
+                    .create(params)
+                    .get();
 
             String response = completion.choices()
-                            .get(0)
-                            .message()
-                            .content().get();
+                    .get(0)
+                    .message()
+                    .content().get();
 
             return PromptResolve.builder()
                     .success(true)
