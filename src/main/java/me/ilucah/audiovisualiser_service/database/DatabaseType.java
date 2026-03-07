@@ -1,5 +1,8 @@
 package me.ilucah.audiovisualiser_service.database;
 
+import lombok.Getter;
+
+@Getter
 public enum DatabaseType {
 
     SQLITE("org.sqlite.JDBC",
@@ -21,19 +24,4 @@ public enum DatabaseType {
         this.insert = insert;
     }
 
-    public String getBaseUrl() {
-        return baseUrl;
-    }
-
-    public String getCreateTableSQL() {
-        return createTableSQL;
-    }
-
-    public String getDriver() {
-        return driver;
-    }
-
-    public String getInsert() {
-        return insert;
-    }
 }

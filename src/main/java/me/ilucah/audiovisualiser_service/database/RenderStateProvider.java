@@ -16,13 +16,13 @@ public class RenderStateProvider implements IRenderStateStorageProvider {
     private final HikariDataSource ds;
     private final String tableCreateSQL, insert;
 
-    public RenderStateProvider(String jdbcUrl, String driverClassName, String tableCreateSQL, String insert) {
-        this.tableCreateSQL = tableCreateSQL;
-        this.insert = insert;
+    public RenderStateProvider(DatabaseType databaseType) {
+        this.tableCreateSQL = databaseType.getCreateTableSQL();
+        this.insert = databaseType.getInsert();
 
         HikariConfig config = new HikariConfig();
-        config.setDriverClassName(driverClassName);
-        config.setJdbcUrl(jdbcUrl);
+        config.setDriverClassName(databaseType.getDriver());
+        config.setJdbcUrl(databaseType.getBaseUrl());
         ds = new HikariDataSource(config);
         createTable();
     }
@@ -52,12 +52,12 @@ public class RenderStateProvider implements IRenderStateStorageProvider {
     }
 
     @Override
-    public void saveRenderState(String username, UUID renderStateUuid, String renderState) {
+    public void saveRenderState(String username, String renderStateUuid, String renderState) {
         if (!exists(username)) {
             try (Connection conn = ds.getConnection();
                  PreparedStatement ps = conn.prepareStatement(insert)) {
                 ps.setString(1, username);
-                ps.setString(2, renderStateUuid.toString());
+                ps.setString(2, renderStateUuid);
                 ps.setString(3, renderState);
                 ps.executeUpdate();
             } catch (SQLException e) {
@@ -68,11 +68,23 @@ public class RenderStateProvider implements IRenderStateStorageProvider {
         }
     }
 
-    private void setUserDataInDB(String username, UUID renderStateUuid, String renderState) {
+    @Override
+    public void removeRenderState(String username, String renderStateUuid) {
+        try (Connection conn = ds.getConnection();
+             PreparedStatement ps = conn.prepareStatement("REMOVE userdata SET TOKENS=? WHERE UUID=?")) {
+            ps.setString(1, username);
+            ps.setString(2, renderStateUuid);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setUserDataInDB(String username, String renderStateUuid, String renderState) {
         try (Connection conn = ds.getConnection();
              PreparedStatement ps = conn.prepareStatement("UPDATE userdata SET TOKENS=? WHERE UUID=?")) {
             ps.setString(1, username);
-            ps.setString(2, renderStateUuid.toString());
+            ps.setString(2, renderStateUuid);
             ps.setString(3, renderState);
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -81,11 +93,11 @@ public class RenderStateProvider implements IRenderStateStorageProvider {
     }
 
     @Override
-    public String getRenderState(String username, UUID renderStateUuid) {
+    public String getRenderState(String username, String renderStateUuid) {
         try (Connection conn = ds.getConnection();
              PreparedStatement ps = conn.prepareStatement("SELECT TOKENS FROM userdata WHERE UUID=?")) {
             ps.setString(1, username);
-            ps.setString(2, renderStateUuid.toString());
+            ps.setString(2, renderStateUuid);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return rs.getString("TOKENS");
@@ -98,8 +110,8 @@ public class RenderStateProvider implements IRenderStateStorageProvider {
     }
 
     @Override
-    public Map<UUID, String> getRenderStates(String username) {
-        Map<UUID, String> topPlayers = new LinkedHashMap<>();
+    public Map<String, String> getRenderStates(String username) {
+        Map<String, String> topPlayers = new LinkedHashMap<>();
         try (Connection conn = ds.getConnection();
              PreparedStatement ps = conn.prepareStatement("SELECT TOKENS FROM userdata WHERE UUID=?")) {
             ps.setString(1, username);

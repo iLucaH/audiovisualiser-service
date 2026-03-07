@@ -7,11 +7,13 @@ public interface IRenderStateStorageProvider {
 
     boolean exists(String username);
 
-    void saveRenderState(String username, UUID renderStateUuid, String renderState);
+    void saveRenderState(String username, String renderStateUuid, String renderState);
 
-    String getRenderState(String username, UUID renderStateUuid);
+    void removeRenderState(String username, String renderStateUuid);
 
-    Map<UUID, String> getRenderStates(String username);
+    String getRenderState(String username, String renderStateUuid);
+
+    Map<String, String> getRenderStates(String username);
 
     void close();
 }
