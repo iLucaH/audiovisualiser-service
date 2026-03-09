@@ -5,7 +5,7 @@ import com.openai.client.okhttp.OpenAIOkHttpClientAsync;
 import com.openai.models.ChatModel;
 import com.openai.models.chat.completions.ChatCompletion;
 import com.openai.models.chat.completions.ChatCompletionCreateParams;
-import me.ilucah.audiovisualiser_service.prompt.PromptResolve;
+import me.ilucah.audiovisualiser_service.model.PromptResolve;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

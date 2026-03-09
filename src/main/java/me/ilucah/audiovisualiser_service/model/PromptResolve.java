@@ -1,4 +1,4 @@
-package me.ilucah.audiovisualiser_service.prompt;
+package me.ilucah.audiovisualiser_service.model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,7 +23,7 @@ public class PromptResolve {
             ObjectMapper objectMapper = new ObjectMapper();
             return objectMapper.writeValueAsString(this);
         } catch (JsonProcessingException e) {
-            log.error("An ERROR Message");
+            log.error("Unsuccessful prompt resolve mapping from object mapper to string!");
         }
         return null;
     }

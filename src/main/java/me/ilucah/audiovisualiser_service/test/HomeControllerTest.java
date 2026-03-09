@@ -33,6 +33,12 @@ public class HomeControllerTest {
     }
 
     @Test
+    public void registerWhenUnauthenticatedStatusIsOk() throws Exception {
+        this.mvc.perform(post("/auth/register"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     public void rootWhenAuthenticatedThenSaysHelloUser() throws Exception {
         MvcResult result = this.mvc.perform(post("/auth/token")
                         .with(httpBasic("admin", "password")))
