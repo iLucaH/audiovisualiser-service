@@ -52,7 +52,7 @@ public class AuthController {
             return RegisterResolve.Status.INVALID_USERNAME_NULL.build();
         else if (username.length() < USERNAME_MIN_CHARS)
             return RegisterResolve.Status.INVALID_USERNAME_MIN_CHARS.build();
-        else if (username.length() < USERNAME_MAX_CHARS)
+        else if (username.length() > USERNAME_MAX_CHARS)
             return RegisterResolve.Status.INVALID_USERNAME_MAX_CHARS.build();
         else if (password == null)
             return RegisterResolve.Status.INVALID_PASSWORD_NULL.build();
@@ -64,7 +64,7 @@ public class AuthController {
             return RegisterResolve.Status.PASSWORD_UNSAFE.build();
         else {
             log.debug("Register initiated for user: {}.", username);
-            jdbcUserDetailsManager.createUser(User.builder().username(username).password(password).roles("USER").build());
+            jdbcUserDetailsManager.createUser(User.builder().username(username).password("{noop}" + password).roles("USER").build());
             return RegisterResolve.Status.SUCCESS.build();
         }
     }

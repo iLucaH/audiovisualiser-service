@@ -16,12 +16,12 @@ public class RegisterResolve {
     @Getter
     public enum Status {
         SUCCESS(0, "Successfully created your account!"),
-        INVALID_USERNAME_NULL(0, "Please enter a valid username!"),
-        INVALID_USERNAME_MIN_CHARS(0, "Please enter a username with at least " + AuthController.USERNAME_MIN_CHARS + " characters!"),
-        INVALID_USERNAME_MAX_CHARS(0, "Please enter a username with no more than " + AuthController.USERNAME_MAX_CHARS + " characters!"),
-        INVALID_PASSWORD_NULL(0, "Please enter a valid password!"),
-        USERNAME_TAKEN(0, "This username is taken!"),
-        PASSWORD_UNSAFE(0, "Your password is not secure enough!");
+        INVALID_USERNAME_NULL(1, "Please enter a valid username!"),
+        INVALID_USERNAME_MIN_CHARS(2, "Please enter a username with at least " + AuthController.USERNAME_MIN_CHARS + " characters!"),
+        INVALID_USERNAME_MAX_CHARS(3, "Please enter a username with no more than " + AuthController.USERNAME_MAX_CHARS + " characters!"),
+        INVALID_PASSWORD_NULL(4, "Please enter a valid password!"),
+        USERNAME_TAKEN(5, "This username is taken!"),
+        PASSWORD_UNSAFE(6, "Your password is not secure enough!");
 
         private final int id;
         private final String message;

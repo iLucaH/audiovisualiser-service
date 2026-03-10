@@ -1,7 +1,6 @@
 package me.ilucah.audiovisualiser_service.database;
 
 import java.util.Map;
-import java.util.UUID;
 
 public interface IRenderStateStorageProvider {
 
