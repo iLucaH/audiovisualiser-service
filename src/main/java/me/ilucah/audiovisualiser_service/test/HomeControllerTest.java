@@ -32,23 +32,30 @@ public class HomeControllerTest {
                 .andExpect(status().isUnauthorized());
     }
 
+    /*
+        In this case, the username and password is not relevant. We just need to send
+        some data there so that the post is received properly since the endpoint
+        expects some username and password data.
+     */
     @Test
     public void registerWhenUnauthenticatedStatusIsOk() throws Exception {
-        this.mvc.perform(post("/auth/register"))
+        this.mvc.perform(post("/auth/register")
+                .param("username", "n/a")
+                .param("password", "n/a"))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void rootWhenAuthenticatedThenSaysHelloUser() throws Exception {
         MvcResult result = this.mvc.perform(post("/auth/token")
-                        .with(httpBasic("admin", "password")))
+                .with(httpBasic("admin", "password")))
                 .andExpect(status().isOk())
                 .andReturn();
 
         String token = result.getResponse().getContentAsString();
 
         this.mvc.perform(get("/")
-                        .header("Authorization", "Bearer " + token))
+                .header("Authorization", "Bearer " + token))
                 .andExpect(content().string("Hello, admin"));
     }
 
@@ -58,5 +65,9 @@ public class HomeControllerTest {
         this.mvc.perform(get("/").with(jwt()))
                 .andExpect(status().isOk());
     }
+
+    /*
+        Tests for RenderStateController
+     */
 
 }
