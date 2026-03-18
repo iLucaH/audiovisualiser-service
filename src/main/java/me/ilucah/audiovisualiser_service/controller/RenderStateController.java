@@ -13,18 +13,18 @@ import java.util.Optional;
 @RequestMapping("/renderState")
 public class RenderStateController {
 
-    private static final int RENDER_STATE_ID_PRESENT= 0;
-    private static final int RENDER_STATE_ID_NOT_EXIST = 1;
-    private static final int RENDER_STATE_ID_NOT_PRESENT = 2;
+    private static final String RENDER_STATE_ID_PRESENT = "0";
+    private static final String RENDER_STATE_ID_NOT_EXIST = "1";
+    private static final String RENDER_STATE_ID_NOT_PRESENT = "2";
 
     @Autowired
     private RenderStateDao renderStateDao;
 
     @PostMapping("/add")
-    public int add(Principal principal) {
-        RenderState renderState = new RenderState(principal.getName(), "My render state !");
-        renderStateDao.save(renderState);
-        return renderState.getId();
+    public String add(Principal principal, @RequestParam String name, @RequestParam String renderState) {
+        RenderState newRenderState = new RenderState(principal.getName(), name, renderState);
+        renderStateDao.save(newRenderState);
+        return String.valueOf(newRenderState.getId());
     }
 
     @GetMapping("/getAll")
@@ -34,11 +34,11 @@ public class RenderStateController {
 
     @GetMapping("/get")
     public RenderState get(@RequestBody int id) {
-        return renderStateDao.findById(id).orElse(new RenderState(-1, "", ""));
+        return renderStateDao.findById(id).orElse(new RenderState(-1, "", "", ""));
     }
 
     @DeleteMapping("/delete")
-    public int delete(@RequestBody int id) {
+    public String delete(@RequestBody int id) {
         if (!renderStateDao.existsById(id))
             return RENDER_STATE_ID_NOT_EXIST;
         Optional<RenderState> renderStateOptional = renderStateDao.findById(id);

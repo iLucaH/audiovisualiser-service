@@ -20,9 +20,10 @@ public class RenderState {
     private int id;
 
     private String username;
+    private String name;
     private String renderState;
 
-    public RenderState(String username, String renderState) {
+    public RenderState(String username, String name, String renderState) {
         this.username = username;
         this.renderState = renderState;
 
