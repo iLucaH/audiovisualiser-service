@@ -3,6 +3,7 @@ package me.ilucah.audiovisualiser_service.controller;
 import com.openai.client.OpenAIClientAsync;
 import com.openai.client.okhttp.OpenAIOkHttpClientAsync;
 import com.openai.models.ChatModel;
+import com.openai.models.ReasoningEffort;
 import com.openai.models.chat.completions.ChatCompletion;
 import com.openai.models.chat.completions.ChatCompletionCreateParams;
 import me.ilucah.audiovisualiser_service.model.PromptResolve;
@@ -33,7 +34,7 @@ public class PromptController {
     @PostMapping("/prompt")
     public String prompt(@RequestBody String prompt) {
         ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
-                .model(ChatModel.GPT_5_2)
+                .model(ChatModel.GPT_5_4)
                 .addSystemMessage("""
                                 You generate OpenGL GLSL 330 core shaders.
                                 Output ONLY the fragment shader code.
@@ -50,6 +51,7 @@ public class PromptController {
                                 The uniform audioBufferTD is a buffer of data in the time domain.
                                 """)
                 .addUserMessage(prompt)
+                .reasoningEffort(ReasoningEffort.XHIGH)
                 .build();
         try {
             ChatCompletion completion = client.chat()
