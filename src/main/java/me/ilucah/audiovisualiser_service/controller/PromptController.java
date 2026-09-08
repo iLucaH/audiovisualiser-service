@@ -34,7 +34,7 @@ public class PromptController {
     @PostMapping("/prompt")
     public String prompt(@RequestBody String prompt) {
         ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
-                .model(ChatModel.GPT_5_4)
+                .model(ChatModel.GPT_6_ASTRA)
                 .addSystemMessage("""
                                 You generate OpenGL GLSL 330 core shaders.
                                 Output ONLY the fragment shader code.
@@ -49,9 +49,24 @@ public class PromptController {
                                 uniform float screenHeight;
                                 uniform float audioBufferTD[256];
                                 The uniform audioBufferTD is a buffer of data in the time domain.
+                                When using polar coordinates such as atan(y, x) to map data around a
+                                circular shape, treat the angular coordinate as periodic.
+                                
+                                Never create a discontinuity at the atan() wrap boundary (-PI / +PI).
+                                When sampling an array or waveform using an angular coordinate, use
+                                periodic/circular indexing so the final sample wraps back to the first
+                                sample.
+                                
+                                For example, use:
+                                x = fract(x);
+                                i = int(floor(x * N)) % N;
+                                j = (i + 1) % N;
+                                
+                                Do not clamp a circular coordinate to [0, 1] and independently sample
+                                element 0 and element N-1, as this creates a visible seam.
                                 """)
                 .addUserMessage(prompt)
-                .reasoningEffort(ReasoningEffort.XHIGH)
+                .reasoningEffort(ReasoningEffort.MEDIUM)
                 .build();
         try {
             ChatCompletion completion = client.chat()

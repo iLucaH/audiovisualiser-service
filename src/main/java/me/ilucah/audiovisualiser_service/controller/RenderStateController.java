@@ -44,6 +44,7 @@ public class RenderStateController {
         Optional<RenderState> renderStateOptional = renderStateDao.findById(id);
         if (renderStateOptional.isEmpty())
             return RENDER_STATE_ID_NOT_PRESENT;
+        renderStateDao.deleteById(id);
         return RENDER_STATE_ID_PRESENT;
     }
 

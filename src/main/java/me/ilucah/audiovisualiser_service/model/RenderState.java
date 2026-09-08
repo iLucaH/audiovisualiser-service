@@ -1,13 +1,10 @@
 package me.ilucah.audiovisualiser_service.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "RenderState")
+@Table(name = "render_state")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,17 +13,19 @@ import lombok.*;
 public class RenderState {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String username;
     private String name;
+
+    @Column(columnDefinition = "TEXT")
     private String renderState;
 
     public RenderState(String username, String name, String renderState) {
         this.username = username;
+        this.name = name;
         this.renderState = renderState;
-
     }
 
 }
