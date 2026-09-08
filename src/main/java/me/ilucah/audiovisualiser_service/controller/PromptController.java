@@ -48,22 +48,20 @@ public class PromptController {
                                 uniform float screenWidth;
                                 uniform float screenHeight;
                                 uniform float audioBufferTD[256];
+                                uniform float audioBufferFD[128];
                                 The uniform audioBufferTD is a buffer of data in the time domain.
-                                When using polar coordinates such as atan(y, x) to map data around a
-                                circular shape, treat the angular coordinate as periodic.
+                                The uniform audioBufferFD is a buffer of data in the frequency domain.
                                 
-                                Never create a discontinuity at the atan() wrap boundary (-PI / +PI).
-                                When sampling an array or waveform using an angular coordinate, use
-                                periodic/circular indexing so the final sample wraps back to the first
-                                sample.
+                                When using polar coordinates derived from atan(y, x), the entire visual representation must be periodic across the -PI/+PI wrap boundary, not only array sampling.
                                 
-                                For example, use:
-                                x = fract(x);
-                                i = int(floor(x * N)) % N;
-                                j = (i + 1) % N;
+                                Any value derived directly from the angular coordinate must satisfy:
+                                f(-PI) == f(+PI)
                                 
-                                Do not clamp a circular coordinate to [0, 1] and independently sample
-                                element 0 and element N-1, as this creates a visible seam.
+                                Do not use a linearly mapped angular coordinate in non-periodic functions such as smoothstep(), mix(), gradients, thresholds, masks, or colour interpolation unless the result is explicitly made periodic.
+                                
+                                Prefer sin(angle), cos(angle), or periodic/circular interpolation for angular effects.
+                                
+                                When converting angle to [0,1], remember that 0 and 1 represent the same angular position and must produce identical visual values.
                                 """)
                 .addUserMessage(prompt)
                 .reasoningEffort(ReasoningEffort.MEDIUM)
