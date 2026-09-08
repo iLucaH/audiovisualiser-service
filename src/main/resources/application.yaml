@@ -21,8 +21,8 @@ openai:
   project-id: AudioVisualiser
 
 rsa:
-  private-key: classpath:certs/private.pem
-  public-key: classpath:certs/public.pem
+  private-key: ${AV_PRIVATE_KEY}
+  public-key: ${AV_PUBLIC_KEY}
 
 server:
   port: 8080
