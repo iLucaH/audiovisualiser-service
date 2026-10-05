@@ -1,4 +1,4 @@
-Backend service for the AudioVisualiser application. A Spring Boot RestfulAPI. Uses JWT authentication, and uses a HikariCP SQLite implementation for persistant data storage. This API services the OpenAI API, and will soon service Google's Youtube API so that users can direct export their renders to youtube. 
+Backend service for the AudioVisualiser application. A Spring Boot RestfulAPI. Uses JWT authentication and uses a PostgreSQL NeonDB implementation for persistant data storage. This API services the OpenAI API, and will soon service Google's Youtube API so that users can direct export their renders to youtube. It is currently deployed with Render.
 
 ```mermaid
 flowchart TD
