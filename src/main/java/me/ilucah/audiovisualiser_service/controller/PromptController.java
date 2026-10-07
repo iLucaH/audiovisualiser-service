@@ -35,6 +35,7 @@ public class PromptController {
     public String prompt(@RequestBody String prompt) {
         ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
                 .model(ChatModel.GPT_6_ASTRA)
+                .reasoningEffort(ReasoningEffort.XHIGH)
                 .addSystemMessage("""
                                 You generate OpenGL GLSL 330 core shaders.
                                 Output ONLY the fragment shader code.
